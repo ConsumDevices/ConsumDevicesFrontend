@@ -106,6 +106,7 @@ class PersonForm extends React.Component {
         });
     }
 
+    //cand dai submit dai register la persoana
     handleSubmit() {
         let person = {
             name: this.state.formControls.name.value,
@@ -118,6 +119,7 @@ class PersonForm extends React.Component {
         this.registerPerson(person);
     }
 
+    //si aici render, cu componente noi
     render() {
         return (
             <div>
@@ -178,6 +180,7 @@ class PersonForm extends React.Component {
                     </Row>
 
                 {
+                    //acolade pentru cod
                     this.state.errorStatus > 0 &&
                     <APIResponseErrorMessage errorStatus={this.state.errorStatus} error={this.state.error}/>
                 }

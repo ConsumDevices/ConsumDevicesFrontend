@@ -17,6 +17,7 @@ const textStyle = {
     textDecoration: 'none'
 };
 
+//aici e o constanta, e un div
 const NavigationBar = () => (
     <div>
         <Navbar color="dark" light expand="md">
@@ -31,12 +32,9 @@ const NavigationBar = () => (
                        Menu
                     </DropdownToggle>
                     <DropdownMenu right >
-
                         <DropdownItem>
                             <NavLink href="/person">Persons</NavLink>
                         </DropdownItem>
-
-
                     </DropdownMenu>
                 </UncontrolledDropdown>
 

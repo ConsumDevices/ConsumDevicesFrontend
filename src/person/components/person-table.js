@@ -1,7 +1,7 @@
 import React from "react";
 import Table from "../../commons/tables/table";
 
-
+//header + accessor
 const columns = [
     {
         Header: 'Name',
@@ -13,6 +13,7 @@ const columns = [
     }
 ];
 
+//filter dupa nume
 const filters = [
     {
         accessor: 'name',
@@ -28,6 +29,7 @@ class PersonTable extends React.Component {
         };
     }
 
+    //render e un tabel
     render() {
         return (
             <Table

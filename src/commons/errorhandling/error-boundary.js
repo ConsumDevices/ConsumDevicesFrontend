@@ -13,6 +13,7 @@ class ErrorBoundary extends React.Component {
         console.log("info:" + info);
     }
 
+    //aparent returneaza un h1 daca este eroare
     render() {
         if (this.state.hasError) {
             return <h1 className={styles.errorTitle}>An error occured at component level.</h1>;

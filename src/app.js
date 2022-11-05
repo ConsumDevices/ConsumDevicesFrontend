@@ -12,6 +12,7 @@ class App extends React.Component {
 
     render() {
 
+        //aici facem routarea, pentru fiecare pagina o sa punem o ruta
         return (
             <div className={styles.back}>
             <Router>

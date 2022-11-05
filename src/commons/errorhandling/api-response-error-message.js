@@ -2,6 +2,7 @@ import React from 'react'
 import {Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, UncontrolledAlert} from 'reactstrap';
 import styles from '../styles/project-style.css';
 
+//componenta react, pentru mesaje de eroare
 class APIResponseErrorMessage extends React.Component {
 
     constructor(props) {
@@ -20,7 +21,7 @@ class APIResponseErrorMessage extends React.Component {
     {
         return (
             <div>
-
+                /* o eroare de cannot submit */
                 <UncontrolledAlert color="danger">
                     An unexpected error occurred on the server side!
                     { this.state.errorStatus > 1 && <Button color="link"  onClick={this.toggleForm}>Details...</Button>}
