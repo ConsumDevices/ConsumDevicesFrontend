@@ -21,7 +21,6 @@ class APIResponseErrorMessage extends React.Component {
     {
         return (
             <div>
-                /* o eroare de cannot submit */
                 <UncontrolledAlert color="danger">
                     An unexpected error occurred on the server side!
                     { this.state.errorStatus > 1 && <Button color="link"  onClick={this.toggleForm}>Details...</Button>}

@@ -76,7 +76,7 @@ class Table extends Component {
                             return (
                                 <Col key={index}>
                                     <div >
-                                        <Field id={header.accessor} label={header.accessor}
+                                        <Field id={header.accessor} label="Search by name"
                                                onChange={(e) => this.handleChange(e, index, header.accessor)}/>
                                     </div>
                                 </Col>
@@ -94,7 +94,7 @@ class Table extends Component {
                             getTrProps={this.getTRPropsType}
                             showPagination={true}
                             style={{
-                                height: '300px'
+                                height: '300px',
                             }}
                         />
                     </Col>

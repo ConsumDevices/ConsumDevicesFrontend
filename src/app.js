@@ -2,7 +2,8 @@ import React from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import NavigationBar from './navigation-bar'
 import Home from './home/home';
-import PersonContainer from './person/person-container'
+import UserContainer from './user/user-container'
+import DeviceContainer from './device/device-container'
 
 import ErrorPage from './commons/errorhandling/error-page';
 import styles from './commons/styles/project-style.css';
@@ -28,8 +29,14 @@ class App extends React.Component {
 
                         <Route
                             exact
-                            path='/person'
-                            render={() => <PersonContainer/>}
+                            path='/user'
+                            render={() => <UserContainer/>}
+                        />
+
+                        <Route
+                            exact
+                            path='/device'
+                            render={() => <DeviceContainer/>}
                         />
 
                         {/*Error*/}

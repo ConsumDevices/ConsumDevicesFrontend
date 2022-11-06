@@ -10,14 +10,16 @@ import {
     ModalHeader,
     Row
 } from 'reactstrap';
-import PersonForm from "./components/person-form";
+import UserForm from "./components/user-form";
 
-import * as API_USERS from "./api/person-api"
-import PersonTable from "./components/person-table";
+import * as API_USERS from "./api/user-api"
+import UserTable from "./components/user-table";
 
 
+const styleDiv = {overflow: 'hidden'};
+const styleHeader = {textAlign: 'center', backgroundColor: '#e5c9c9'};
 
-class PersonContainer extends React.Component {
+class UserContainer extends React.Component {
 
     constructor(props) {
         super(props);
@@ -34,11 +36,11 @@ class PersonContainer extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchPersons();
+        this.fetchUsers();
     }
 
-    fetchPersons() {
-        return API_USERS.getPersons((result, status, err) => {
+    fetchUsers() {
+        return API_USERS.getUsers((result, status, err) => {
 
             if (result !== null && status === 200) {
                 this.setState({
@@ -64,26 +66,26 @@ class PersonContainer extends React.Component {
             isLoaded: false
         });
         this.toggleForm();
-        this.fetchPersons();
+        this.fetchUsers();
     }
 
     render() {
         return (
-            <div>
-                <CardHeader>
-                    <strong> Person Management </strong>
+            <div style={styleDiv}>
+                <CardHeader style={styleHeader}>
+                    <strong> User Management </strong>
                 </CardHeader>
                 <Card>
                     <br/>
                     <Row>
-                        <Col sm={{size: '8', offset: 1}}>
-                            <Button color="primary" onClick={this.toggleForm}>Add Person </Button>
+                        <Col sm={{size: '8', offset: 2}}>
+                            <Button color="primary" onClick={this.toggleForm}>Add User </Button>
                         </Col>
                     </Row>
                     <br/>
                     <Row>
-                        <Col sm={{size: '8', offset: 1}}>
-                            {this.state.isLoaded && <PersonTable tableData = {this.state.tableData}/>}
+                        <Col sm={{size: '8', offset: 2}}>
+                            {this.state.isLoaded && <UserTable tableData = {this.state.tableData}/>}
                             {this.state.errorStatus > 0 && <APIResponseErrorMessage
                                                             errorStatus={this.state.errorStatus}
                                                             error={this.state.error}
@@ -94,9 +96,9 @@ class PersonContainer extends React.Component {
 
                 <Modal isOpen={this.state.selected} toggle={this.toggleForm}
                        className={this.props.className} size="lg">
-                    <ModalHeader toggle={this.toggleForm}> Add Person: </ModalHeader>
-                    <ModalBody>
-                        <PersonForm reloadHandler={this.reload}/>
+                    <ModalHeader style={{backgroundColor: '#e5c9c9'}} toggle={this.toggleForm}> Add User: </ModalHeader>
+                    <ModalBody style={{backgroundColor: '#e5c9c9'}}>
+                        <UserForm reloadHandler={this.reload}/>
                     </ModalBody>
                 </Modal>
 
@@ -107,4 +109,4 @@ class PersonContainer extends React.Component {
 }
 
 
-export default PersonContainer;
+export default UserContainer;

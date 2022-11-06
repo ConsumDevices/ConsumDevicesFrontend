@@ -10,6 +10,14 @@ const columns = [
     {
         Header: 'Age',
         accessor: 'age',
+    },
+    {
+        Header: 'Address',
+        accessor: 'address'
+    },
+    {
+        Header: 'Email',
+        accessor: 'email'
     }
 ];
 
@@ -17,10 +25,13 @@ const columns = [
 const filters = [
     {
         accessor: 'name',
+    },
+    {
+        accessor: 'address',
     }
 ];
 
-class PersonTable extends React.Component {
+class UserTable extends React.Component {
 
     constructor(props) {
         super(props);
@@ -42,4 +53,4 @@ class PersonTable extends React.Component {
     }
 }
 
-export default PersonTable;
+export default UserTable;

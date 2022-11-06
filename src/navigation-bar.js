@@ -31,9 +31,12 @@ const NavigationBar = () => (
                     <DropdownToggle style={textStyle} nav caret>
                        Menu
                     </DropdownToggle>
-                    <DropdownMenu right >
+                    <DropdownMenu left >
                         <DropdownItem>
-                            <NavLink href="/person">Persons</NavLink>
+                            <NavLink href="/user">Users</NavLink>
+                        </DropdownItem>
+                        <DropdownItem>
+                            <NavLink href="/device">Devices</NavLink>
                         </DropdownItem>
                     </DropdownMenu>
                 </UncontrolledDropdown>

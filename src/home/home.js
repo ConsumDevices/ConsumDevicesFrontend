@@ -3,7 +3,9 @@ import React from 'react';
 //import BackgroundImg from '../commons/images/future-medicine.jpg';
 import BackgroundImg from '../commons/images/energyImage.jpeg';
 
-import {Button, Container, Jumbotron} from 'reactstrap';
+import {Button, Card, Col, Container, Jumbotron, Row} from 'reactstrap';
+import UserTable from "../user/components/user-table";
+import APIResponseErrorMessage from "../commons/errorhandling/api-response-error-message";
 
 const backgroundStyle = {
     backgroundPosition: 'center',
@@ -13,7 +15,9 @@ const backgroundStyle = {
     height: "1920px",
     backgroundImage: `url(${BackgroundImg})`
 };
-const textStyle = {color: 'white', };
+const textStyle = {color: 'white', textAlign: 'center'};
+const buttonStyle1 = {display: 'inline', margin:'1% 1% 1% 1%', backgroundColor: '#751212'};
+const buttonStyle2 = {display: 'inline', margin:'1% 1% 1% 1%', backgroundColor: '#1d0808'};
 
 class Home extends React.Component {
 
@@ -29,9 +33,14 @@ class Home extends React.Component {
                         <p className="lead" style={textStyle}> <b>Test.</b> </p>
                         <hr className="my-2"/>
                         <p  style={textStyle}> <b>Test again </b> </p>
-                        <p className="lead">
-                            {/*<Button color="primary" onClick={() => window.open('http://coned.utcluj.ro/~salomie/DS_Lic/')}>Test Buton</Button>*/}
-                        </p>
+                        <Row>
+                            <Col sm={{size: '1', offset: 5}}>
+                                <Button color="primary" style={buttonStyle1} onClick={() => window.open('http://coned.utcluj.ro/~salomie/DS_Lic/')}>Login</Button>
+                            </Col>
+                            <Col sm={{size: '1', offset: 0}}>
+                                <Button color="primary" style={buttonStyle2} onClick={() => window.open('http://coned.utcluj.ro/~salomie/DS_Lic/')}>Register</Button>
+                            </Col>
+                        </Row>
                     </Container>
                 </Jumbotron>
 
