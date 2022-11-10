@@ -76,7 +76,7 @@ class Table extends Component {
                             return (
                                 <Col key={index}>
                                     <div >
-                                        <Field id={header.accessor} label="Search by name"
+                                        <Field id={header.accessor} label={"Search by " + header.accessor}
                                                onChange={(e) => this.handleChange(e, index, header.accessor)}/>
                                     </div>
                                 </Col>

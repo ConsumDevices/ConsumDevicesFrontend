@@ -38,18 +38,29 @@ class DeviceForm extends React.Component {
                     placeholder: 'Description',
                     valid: false,
                     touched: false,
+                    validationRules: {
+                        minLength: 3,
+                        isRequired: true
+                    }
                 },
                 address: {
                     value: '',
                     placeholder: 'Cluj, Zorilor, Str. Lalelelor 21',
                     valid: false,
                     touched: false,
+                    validationRules: {
+                        isRequired: true
+                    }
                 },
                 maxHourlyConsumption: {
                     value: '',
-                    placeholder: '',
+                    placeholder: 'Consumption',
                     valid: false,
                     touched: false,
+                    validationRules: {
+                        maxHourlyConsumptionValidator: true,
+                        isRequired: true
+                    }
                 },
             }
         };
@@ -130,7 +141,7 @@ class DeviceForm extends React.Component {
                            required
                     />
                     {this.state.formControls.name.touched && !this.state.formControls.name.valid &&
-                    <div className={"error-message row"}> * Name must have at least 3 characters </div>}
+                    <div className={"error-message row"}> * Name must have a valid format </div>}
                 </FormGroup>
 
                 <FormGroup id='description'>
@@ -155,6 +166,8 @@ class DeviceForm extends React.Component {
                            valid={this.state.formControls.address.valid}
                            required
                     />
+                    {this.state.formControls.address.touched && !this.state.formControls.address.valid &&
+                    <div className={"error-message row"}> * Address must have a valid format </div>}
                 </FormGroup>
 
                 <FormGroup id='maxHourlyConsumption'>
@@ -168,6 +181,8 @@ class DeviceForm extends React.Component {
                            required
                     />
                 </FormGroup>
+                {this.state.formControls.maxHourlyConsumption.touched && !this.state.formControls.maxHourlyConsumption.valid &&
+                <div className={"error-message row"}> * MaxHourlyConsumption must have a valid format </div>}
 
                     <Row>
                         <Col sm={{size: '4', offset: 5}}>

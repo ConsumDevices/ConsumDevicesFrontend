@@ -14,7 +14,8 @@ import UserForm from "./components/user-form";
 
 import * as API_USERS from "./api/user-api"
 import UserTable from "./components/user-table";
-
+import NavigationBar from "../navigation-bar";
+import { withRouter } from "react-router-dom";
 
 const styleDiv = {overflow: 'hidden'};
 const styleHeader = {textAlign: 'center', backgroundColor: '#e5c9c9'};
@@ -36,6 +37,7 @@ class UserContainer extends React.Component {
     }
 
     componentDidMount() {
+        this.fetchRole();
         this.fetchUsers();
     }
 
@@ -56,6 +58,37 @@ class UserContainer extends React.Component {
         });
     }
 
+
+    fetchRole() {
+        return API_USERS.getRole((result, status, err) => {
+
+            console.log(result);
+            if (result !== null && status === 200) {
+                //daca nu avem admin, redirectionam la home
+                if(result === "neLogat")
+                {
+                    let newPath = '/'
+                    this.props.history.push(newPath);
+                }
+                else if(result === 'admin' || result === 'Admin')
+                {
+                    //let newPath = '/user'
+                    //this.props.history.push(newPath);
+                }
+                else if(result === 'client' || result === 'Client')
+                {
+                    let newPath = '/client'
+                    this.props.history.push(newPath);
+                }
+            } else {
+                this.setState(({
+                    errorStatus: status,
+                    error: err
+                }));
+            }
+        });
+    }
+
     toggleForm() {
         this.setState({selected: !this.state.selected});
     }
@@ -66,12 +99,14 @@ class UserContainer extends React.Component {
             isLoaded: false
         });
         this.toggleForm();
+        this.fetchRole();
         this.fetchUsers();
     }
 
     render() {
         return (
             <div style={styleDiv}>
+                <NavigationBar />
                 <CardHeader style={styleHeader}>
                     <strong> User Management </strong>
                 </CardHeader>
@@ -109,4 +144,4 @@ class UserContainer extends React.Component {
 }
 
 
-export default UserContainer;
+export default withRouter(UserContainer);

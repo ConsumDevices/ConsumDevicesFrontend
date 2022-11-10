@@ -1,4 +1,5 @@
 //aparent sunt constante
+/*
 const minLengthValidator = (value, minLength) => {
     return value.length >= minLength;
 };
@@ -65,3 +66,4 @@ const validate = (value, rules) => {
 
 //numai la validate dai export, doar asta folosesti altundeva?
 export default validate;
+*/

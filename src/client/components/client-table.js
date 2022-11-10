@@ -8,34 +8,26 @@ const columns = [
         accessor: 'name',
     },
     {
-        Header: 'Age',
-        accessor: 'age',
+        Header: 'Description',
+        accessor: 'description',
     },
     {
         Header: 'Address',
-        accessor: 'address'
+        accessor: 'address',
     },
     {
-        Header: 'Email',
-        accessor: 'email',
-    },
-    {
-        Header: 'Role',
-        accessor: 'role',
+        Header: 'MaxHourlyConsumption',
+        accessor: 'maxHourlyConsumption',
     }
 ];
 
-//filter dupa nume
 const filters = [
     {
         accessor: 'name',
     },
-    //{
-    //    accessor: 'address',
-    //}
 ];
 
-class UserTable extends React.Component {
+class ClientTable extends React.Component {
 
     constructor(props) {
         super(props);
@@ -44,7 +36,6 @@ class UserTable extends React.Component {
         };
     }
 
-    //render e un tabel
     render() {
         return (
             <Table
@@ -57,4 +48,4 @@ class UserTable extends React.Component {
     }
 }
 
-export default UserTable;
+export default ClientTable;

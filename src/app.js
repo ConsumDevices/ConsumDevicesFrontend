@@ -4,6 +4,7 @@ import NavigationBar from './navigation-bar'
 import Home from './home/home';
 import UserContainer from './user/user-container'
 import DeviceContainer from './device/device-container'
+import ClientContainer from './client/client-container'
 
 import ErrorPage from './commons/errorhandling/error-page';
 import styles from './commons/styles/project-style.css';
@@ -18,7 +19,6 @@ class App extends React.Component {
             <div className={styles.back}>
             <Router>
                 <div>
-                    <NavigationBar />
                     <Switch>
 
                         <Route
@@ -37,6 +37,12 @@ class App extends React.Component {
                             exact
                             path='/device'
                             render={() => <DeviceContainer/>}
+                        />
+
+                        <Route
+                            exact
+                            path='/client'
+                            render={() => <ClientContainer/>}
                         />
 
                         {/*Error*/}

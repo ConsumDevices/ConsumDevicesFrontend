@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import validate from "./validators/user-validators";
 import Button from "react-bootstrap/Button";
@@ -250,3 +251,5 @@ class UserForm extends React.Component {
 }
 
 export default UserForm;
+*/
+

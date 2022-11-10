@@ -10,17 +10,17 @@ import {
     ModalHeader,
     Row
 } from 'reactstrap';
-import DeviceForm from "./components/device-form";
+//import UserForm from "./components/user-form";
 
-import * as API_DEVICES from "./api/device-api"
-import DeviceTable from "./components/device-table";
+import * as API_CLIENT from "./api/client-api"
+import ClientTable from "./components/client-table";
 import NavigationBar from "../navigation-bar";
-
+import { withRouter } from "react-router-dom";
 
 const styleDiv = {overflow: 'hidden'};
 const styleHeader = {textAlign: 'center', backgroundColor: '#e5c9c9'};
 
-class DeviceContainer extends React.Component {
+class ClientContainer extends React.Component {
 
     constructor(props) {
         super(props);
@@ -41,7 +41,7 @@ class DeviceContainer extends React.Component {
     }
 
     fetchDevices() {
-        return API_DEVICES.getDevices((result, status, err) => {
+        return API_CLIENT.getDevices((result, status, err) => {
 
             if (result !== null && status === 200) {
                 this.setState({
@@ -57,6 +57,38 @@ class DeviceContainer extends React.Component {
         });
     }
 
+
+    /*
+    fetchRole() {
+        return API_USERS.getRole((result, status, err) => {
+
+            if (result !== null && status === 200) {
+                //daca nu avem admin, redirectionam la home
+                if(result === "nelogat")
+                {
+                    let newPath = '/'
+                    this.props.history.push(newPath);
+                }
+                else if(result === 'admin' || result === 'Admin')
+                {
+                    //let newPath = '/user'
+                    //this.props.history.push(newPath);
+                }
+                else if(result === 'client' || result === 'client')
+                {
+                    let newPath = '/device'
+                    this.props.history.push(newPath);
+                }
+            } else {
+                this.setState(({
+                    errorStatus: status,
+                    error: err
+                }));
+            }
+        });
+    }
+    */
+
     toggleForm() {
         this.setState({selected: !this.state.selected});
     }
@@ -67,27 +99,21 @@ class DeviceContainer extends React.Component {
             isLoaded: false
         });
         this.toggleForm();
+        //this.fetchRole();
         this.fetchDevices();
     }
 
     render() {
         return (
             <div style={styleDiv}>
-                <NavigationBar />
                 <CardHeader style={styleHeader}>
-                    <strong> Device Management </strong>
+                    <strong> Hello. This are your devices </strong>
                 </CardHeader>
                 <Card>
                     <br/>
                     <Row>
                         <Col sm={{size: '8', offset: 2}}>
-                            <Button color="primary" onClick={this.toggleForm}>Add Device </Button>
-                        </Col>
-                    </Row>
-                    <br/>
-                    <Row>
-                        <Col sm={{size: '8', offset: 2}}>
-                            {this.state.isLoaded && <DeviceTable tableData = {this.state.tableData}/>}
+                            {this.state.isLoaded && <ClientTable tableData = {this.state.tableData}/>}
                             {this.state.errorStatus > 0 && <APIResponseErrorMessage
                                                             errorStatus={this.state.errorStatus}
                                                             error={this.state.error}
@@ -96,14 +122,6 @@ class DeviceContainer extends React.Component {
                     </Row>
                 </Card>
 
-                <Modal isOpen={this.state.selected} toggle={this.toggleForm}
-                       className={this.props.className} size="lg">
-                    <ModalHeader style={{backgroundColor: '#e5c9c9'}} toggle={this.toggleForm}> Add Device: </ModalHeader>
-                    <ModalBody style={{backgroundColor: '#e5c9c9'}}>
-                        <DeviceForm reloadHandler={this.reload}/>
-                    </ModalBody>
-                </Modal>
-
             </div>
         )
 
@@ -111,4 +129,4 @@ class DeviceContainer extends React.Component {
 }
 
 
-export default DeviceContainer;
+export default ClientContainer;//withRouter(ClientContainer);

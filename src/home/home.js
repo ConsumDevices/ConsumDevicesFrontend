@@ -1,11 +1,11 @@
 import React from 'react';
 
-//import BackgroundImg from '../commons/images/future-medicine.jpg';
 import BackgroundImg from '../commons/images/energyImage.jpeg';
 
-import {Button, Card, Col, Container, Jumbotron, Row} from 'reactstrap';
-import UserTable from "../user/components/user-table";
-import APIResponseErrorMessage from "../commons/errorhandling/api-response-error-message";
+import {Button, Card, Col, Container, Jumbotron, Modal, ModalBody, ModalHeader, Row} from 'reactstrap';
+import HomeForm from "./components/home-form";
+
+import * as API_HOME from "../home/api/home-api";
 
 const backgroundStyle = {
     backgroundPosition: 'center',
@@ -16,10 +16,69 @@ const backgroundStyle = {
     backgroundImage: `url(${BackgroundImg})`
 };
 const textStyle = {color: 'white', textAlign: 'center'};
-const buttonStyle1 = {display: 'inline', margin:'1% 1% 1% 1%', backgroundColor: '#751212'};
-const buttonStyle2 = {display: 'inline', margin:'1% 1% 1% 1%', backgroundColor: '#1d0808'};
+const buttonStyle1 = {display: 'inline', margin:'1% 1% 1% 48%', backgroundColor: '#751212'};
 
 class Home extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.toggleForm = this.toggleForm.bind(this);
+        this.reload = this.reload.bind(this);
+        this.state = {
+            selected: false,
+            collapseForm: false,
+            tableData: [],
+            isLoaded: false,
+            errorStatus: 0,
+            error: null
+        };
+    }
+
+    toggleForm() {
+        this.setState({selected: !this.state.selected});
+    }
+
+    componentDidMount() {
+        this.fetchRoleLogout();
+    }
+
+    fetchRoleLogout() {
+        return API_HOME.getRoleLogout((result, status, err) => {
+
+            if (result !== null && status === 200) {
+                //daca nu avem admin, redirectionam la home
+                if(result === "nelogat")
+                {
+
+                }
+                else if(result === 'admin' || result === 'Admin')
+                {
+                    //let newPath = '/user'
+                    //this.props.history.push(newPath);
+                }
+                else if(result === 'client' || result === 'client')
+                {
+
+                }
+            } else {
+                this.setState(({
+                    errorStatus: status,
+                    error: err
+                }));
+            }
+        });
+    }
+
+
+
+    reload() {
+        this.setState({
+            isLoaded: false
+        });
+        this.toggleForm();
+        //this.fetchRoleLogout()
+        //this.fetchUsers();
+    }
 
 
     render() {
@@ -34,15 +93,18 @@ class Home extends React.Component {
                         <hr className="my-2"/>
                         <p  style={textStyle}> <b>Test again </b> </p>
                         <Row>
-                            <Col sm={{size: '1', offset: 5}}>
-                                <Button color="primary" style={buttonStyle1} onClick={() => window.open('http://coned.utcluj.ro/~salomie/DS_Lic/')}>Login</Button>
-                            </Col>
-                            <Col sm={{size: '1', offset: 0}}>
-                                <Button color="primary" style={buttonStyle2} onClick={() => window.open('http://coned.utcluj.ro/~salomie/DS_Lic/')}>Register</Button>
-                            </Col>
+                            <Button color="primary" style={buttonStyle1} onClick={this.toggleForm}>Login</Button>
                         </Row>
                     </Container>
                 </Jumbotron>
+
+                <Modal isOpen={this.state.selected} toggle={this.toggleForm}
+                       className={this.props.className} size="lg">
+                    <ModalHeader style={{backgroundColor: '#1a5ec8'}} toggle={this.toggleForm}> Login: </ModalHeader>
+                    <ModalBody style={{backgroundColor: '#1a5ec8'}}>
+                        <HomeForm reloadHandler={this.reload}/>
+                    </ModalBody>
+                </Modal>
 
             </div>
         )
