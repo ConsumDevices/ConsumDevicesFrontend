@@ -3,7 +3,8 @@ import RestApiClient from "../../commons/api/rest-client";
 
 
 const endpoint = {
-    device: '/device'
+    device: '/device',
+    user: '/user'
 };
 
 function getDevices(callback) {
@@ -23,6 +24,17 @@ function getDeviceById(params, callback){
     RestApiClient.performRequest(request, callback);
 }
 
+function getRole(callback) {
+    let request = new Request(HOST.backend_api + endpoint.user + "/role", {
+        method: 'GET',
+    });
+    console.log(request.url);
+    RestApiClient.performRequest(request, callback);
+}
+
+
+
+
 function postDevice(device, callback){
     let request = new Request(HOST.backend_api + endpoint.device , {
         method: 'POST',
@@ -41,5 +53,6 @@ function postDevice(device, callback){
 export {
     getDevices,
     getDeviceById,
-    postDevice
+    postDevice,
+    getRole
 };

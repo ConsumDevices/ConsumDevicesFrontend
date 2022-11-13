@@ -112,10 +112,21 @@ class UserContainer extends React.Component {
                 </CardHeader>
                 <Card>
                     <br/>
-                    <Row>
-                        <Col sm={{size: '8', offset: 2}}>
+                    <Row style={{marginLeft: "0.3%"}}>
+                        <Col sm={{size: '0', offset: 2}}>
                             <Button color="primary" onClick={this.toggleForm}>Add User </Button>
                         </Col>
+                        <Col sm={{size: '0', offset: 1}}>
+                            <Button color="primary" onClick={this.toggleForm}>Update User </Button>
+                        </Col>
+                        <Col sm={{size: '0', offset: 1}}>
+                            <Button color="primary" onClick={this.toggleForm}>Delete User </Button>
+                        </Col>
+                        <Row style={{marginLeft: "15.2%"}}>
+                            <Col sm={{size: '10', offset: 11}}>
+                                <Button color="primary" onClick={()=>{this.props.history.push('/')}}>Logout</Button>
+                            </Col>
+                        </Row>
                     </Row>
                     <br/>
                     <Row>

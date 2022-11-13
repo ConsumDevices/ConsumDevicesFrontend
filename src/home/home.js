@@ -15,7 +15,8 @@ const backgroundStyle = {
     height: "1920px",
     backgroundImage: `url(${BackgroundImg})`
 };
-const textStyle = {color: 'white', textAlign: 'center'};
+const textStyle = {color: 'white', textAlign: 'center', marginTop : '7%'};
+const titleStyle = {color: 'white', textAlign: 'center'};
 const buttonStyle1 = {display: 'inline', margin:'1% 1% 1% 48%', backgroundColor: '#751212'};
 
 class Home extends React.Component {
@@ -47,7 +48,7 @@ class Home extends React.Component {
 
             if (result !== null && status === 200) {
                 //daca nu avem admin, redirectionam la home
-                if(result === "nelogat")
+                if(result === "neLogat")
                 {
 
                 }
@@ -56,7 +57,7 @@ class Home extends React.Component {
                     //let newPath = '/user'
                     //this.props.history.push(newPath);
                 }
-                else if(result === 'client' || result === 'client')
+                else if(result === 'client' || result === 'Client')
                 {
 
                 }
@@ -88,10 +89,11 @@ class Home extends React.Component {
             <div>
                 <Jumbotron fluid style={backgroundStyle}>
                     <Container fluid>
-                        <h1 className="display-3" style={textStyle}>Energy consumption</h1>
-                        <p className="lead" style={textStyle}> <b>Test.</b> </p>
+                        <h1 className="display-3" style={titleStyle}>Energy consumption</h1>
+                        <p className="lead" style={textStyle}> <b>Energy consumption has to be managed by an intelligent grid when it comes to highly populated areas. Smart-grid technologies allow for the integration of renewable energy into the grid as well as energy from distributed sources.
+
+                            </b> </p>
                         <hr className="my-2"/>
-                        <p  style={textStyle}> <b>Test again </b> </p>
                         <Row>
                             <Button color="primary" style={buttonStyle1} onClick={this.toggleForm}>Login</Button>
                         </Row>

@@ -15,6 +15,7 @@ import DeviceForm from "./components/device-form";
 import * as API_DEVICES from "./api/device-api"
 import DeviceTable from "./components/device-table";
 import NavigationBar from "../navigation-bar";
+import { withRouter } from "react-router-dom";
 
 
 const styleDiv = {overflow: 'hidden'};
@@ -37,6 +38,7 @@ class DeviceContainer extends React.Component {
     }
 
     componentDidMount() {
+        this.fetchRole();
         this.fetchDevices();
     }
 
@@ -57,6 +59,36 @@ class DeviceContainer extends React.Component {
         });
     }
 
+    fetchRole() {
+        return API_DEVICES.getRole((result, status, err) => {
+
+            console.log(result);
+            if (result !== null && status === 200) {
+                //daca nu avem admin, redirectionam la home
+                if(result === "neLogat")
+                {
+                    let newPath = '/'
+                    this.props.history.push(newPath);
+                }
+                else if(result === 'admin' || result === 'Admin')
+                {
+                    //let newPath = '/user'
+                    //this.props.history.push(newPath);
+                }
+                else if(result === 'client' || result === 'Client')
+                {
+                    let newPath = '/client'
+                    this.props.history.push(newPath);
+                }
+            } else {
+                this.setState(({
+                    errorStatus: status,
+                    error: err
+                }));
+            }
+        });
+    }
+
     toggleForm() {
         this.setState({selected: !this.state.selected});
     }
@@ -67,6 +99,7 @@ class DeviceContainer extends React.Component {
             isLoaded: false
         });
         this.toggleForm();
+        this.fetchRole();
         this.fetchDevices();
     }
 
@@ -79,10 +112,21 @@ class DeviceContainer extends React.Component {
                 </CardHeader>
                 <Card>
                     <br/>
-                    <Row>
-                        <Col sm={{size: '8', offset: 2}}>
+                    <Row style={{marginLeft: "0.3%"}}>
+                        <Col sm={{size: '0', offset: 2}}>
                             <Button color="primary" onClick={this.toggleForm}>Add Device </Button>
                         </Col>
+                        <Col sm={{size: '0', offset: 1}}>
+                            <Button color="primary" onClick={this.toggleForm}>Update Device </Button>
+                        </Col>
+                        <Col sm={{size: '0', offset: 1}}>
+                            <Button color="primary" onClick={this.toggleForm}>Delete Device </Button>
+                        </Col>
+                        <Row style={{marginLeft: "12.2%"}}>
+                            <Col sm={{size: '10', offset: 11}}>
+                                <Button color="primary" onClick={()=>{this.props.history.push('/')}}>Logout</Button>
+                            </Col>
+                        </Row>
                     </Row>
                     <br/>
                     <Row>
@@ -111,4 +155,4 @@ class DeviceContainer extends React.Component {
 }
 
 
-export default DeviceContainer;
+export default withRouter(DeviceContainer);
