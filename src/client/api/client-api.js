@@ -7,8 +7,9 @@ const endpoint = {
     clientDevice: '/device'
 };
 
-function getDevices(callback) {
-    let request = new Request(HOST.backend_api + endpoint.clientDevice, {
+function getDevicesClient(callback) {
+    //console.log(params);
+    let request = new Request(HOST.backend_api + endpoint.clientDevice + "/clientD", {
         method: 'GET',
     });
     console.log(request.url);
@@ -23,6 +24,16 @@ function getRole(callback) {
     RestApiClient.performRequest(request, callback);
 }
 
+/*
+function getId(callback) {
+    let request = new Request(HOST.backend_api + endpoint.clientUser + "/id", {
+        method: 'GET',
+    });
+    console.log(request.url);
+    RestApiClient.performRequest(request, callback);
+}
+*/
+
 function getUserName(callback) {
     let request = new Request(HOST.backend_api + endpoint.clientUser + "/name", {
         method: 'GET',
@@ -32,7 +43,7 @@ function getUserName(callback) {
 }
 
 export {
-    getDevices,
+    getDevicesClient,
     getRole,
-    getUserName
+    getUserName,
 };

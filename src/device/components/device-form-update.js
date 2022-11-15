@@ -1,14 +1,14 @@
 import React from 'react';
-import validate from "./validators/user-validators";
+import validate from "./validators/device-validators";
 import Button from "react-bootstrap/Button";
-import * as API_USERS from "../api/user-api";
+import * as API_DEVICES from "../api/device-api";
 import APIResponseErrorMessage from "../../commons/errorhandling/api-response-error-message";
 import {Col, Row} from "reactstrap";
 import { FormGroup, Input, Label} from 'reactstrap';
 
 
 
-class UserForm extends React.Component {
+class DeviceFormUpdate extends React.Component {
 
     constructor(props) {
         super(props);
@@ -25,62 +25,51 @@ class UserForm extends React.Component {
             formControls: {
                 name: {
                     value: '',
-                    placeholder: 'What is your name?',
+                    placeholder: 'Update the name',
                     valid: false,
                     touched: false,
                     validationRules: {
                         minLength: 3,
-                        isRequired: true,
-                        nameValidator: true,
+                        isRequired: true
                     }
                 },
-                email: {
+                description: {
                     value: '',
-                    placeholder: 'Email',
+                    placeholder: 'Update the description',
                     valid: false,
                     touched: false,
                     validationRules: {
-                        emailValidator: true,
-                        isRequired: true,
-                    }
-                },
-                age: {
-                    value: '',
-                    placeholder: 'Age',
-                    valid: false,
-                    touched: false,
-                    validationRules: {
-                        ageValidator:true,
-                        isRequired:true
+                        minLength: 3,
+                        isRequired: true
                     }
                 },
                 address: {
                     value: '',
-                    placeholder: 'Cluj, Zorilor, Str. Lalelelor 21',
+                    placeholder: 'Update the address',
                     valid: false,
                     touched: false,
                     validationRules: {
-                        isRequired: true,
-                    }
-                },
-                password: {
-                    value: '',
-                    placeholder: 'Password',
-                    valid: false,
-                    touched: false,
-                    validationRules: {
-                        passwordValidator: true
-                    }
-                },
-                role: {
-                    value: '',
-                    placeholder: 'Role',
-                    valid: false,
-                    touched: false,
-                    validationRules: {
-                        roleValidator: true,
                         isRequired: true
                     }
+                },
+                maxHourlyConsumption: {
+                    value: '',
+                    placeholder: 'Update the consumption',
+                    valid: false,
+                    touched: false,
+                    validationRules: {
+                        maxHourlyConsumptionValidator: true,
+                        isRequired: true
+                    }
+                },
+                username: {
+                    value: '',
+                    placeholder: 'Update the username',
+                    valid: false,
+                    touched: false,
+                    //validationRules: {
+                        //minLength: 2,
+                    //}
                 },
             }
         };
@@ -120,10 +109,11 @@ class UserForm extends React.Component {
 
     };
 
-    registerUser(user) {
-        return API_USERS.postUser(user, (result, status, error) => {
+
+    updateDevice(device) {
+        return API_DEVICES.updateDevice(device, (result, status, error) => {
             if (result !== null && (status === 200 || status === 201)) {
-                console.log("Successfully inserted user with id: " + result);
+                console.log("Successfully updated device with id: " + result);
                 this.reloadHandler();
             } else {
                 this.setState(({
@@ -134,19 +124,19 @@ class UserForm extends React.Component {
         });
     }
 
+
     //cand dai submit dai register la persoana
     handleSubmit() {
-        let user = {
+        let device = {
             name: this.state.formControls.name.value,
-            email: this.state.formControls.email.value,
-            age: this.state.formControls.age.value,
+            description: this.state.formControls.description.value,
             address: this.state.formControls.address.value,
-            password: this.state.formControls.password.value,
-            role: this.state.formControls.role.value,
+            maxHourlyConsumption: this.state.formControls.maxHourlyConsumption.value,
+            username: this.state.formControls.username.value,
         };
 
-        console.log(user);
-        this.registerUser(user);
+        console.log(device);
+        this.updateDevice(device);
     }
 
     //si aici render, cu componente noi
@@ -163,20 +153,20 @@ class UserForm extends React.Component {
                            required
                     />
                     {this.state.formControls.name.touched && !this.state.formControls.name.valid &&
-                    <div className={"error-message row"}> * Name must have a valid format</div>}
+                    <div className={"error-message row"}> * Name must have a valid format </div>}
                 </FormGroup>
 
-                <FormGroup id='email'>
-                    <Label for='emailField'> Email: </Label>
-                    <Input name='email' id='emailField' placeholder={this.state.formControls.email.placeholder}
+                <FormGroup id='description'>
+                    <Label for='descriptionField'> Description: </Label>
+                    <Input name='description' id='descriptionField' placeholder={this.state.formControls.description.placeholder}
                            onChange={this.handleChange}
-                           defaultValue={this.state.formControls.email.value}
-                           touched={this.state.formControls.email.touched? 1 : 0}
-                           valid={this.state.formControls.email.valid}
+                           defaultValue={this.state.formControls.description.value}
+                           touched={this.state.formControls.description.touched? 1 : 0}
+                           valid={this.state.formControls.description.valid}
                            required
                     />
-                    {this.state.formControls.email.touched && !this.state.formControls.email.valid &&
-                    <div className={"error-message"}> * Email must have a valid format</div>}
+                    {this.state.formControls.description.touched && !this.state.formControls.description.valid &&
+                    <div className={"error-message"}> * Description must have a valid format</div>}
                 </FormGroup>
 
                 <FormGroup id='address'>
@@ -189,48 +179,31 @@ class UserForm extends React.Component {
                            required
                     />
                     {this.state.formControls.address.touched && !this.state.formControls.address.valid &&
-                    <div className={"error-message"}> * Address must have a valid format</div>}
+                    <div className={"error-message row"}> * Address must have a valid format </div>}
                 </FormGroup>
 
-                <FormGroup id='age'>
-                    <Label for='ageField'> Age: </Label>
-                    <Input name='age' id='ageField' placeholder={this.state.formControls.age.placeholder}
-                           min={0} max={100} type="number"
+                <FormGroup id='maxHourlyConsumption'>
+                    <Label for='maxHourlyConsumptionField'> maxHourlyConsumption: </Label>
+                    <Input name='maxHourlyConsumption' id='maxHourlyConsumptionField' placeholder={this.state.formControls.maxHourlyConsumption.placeholder}
+                           min={0} max={10000} type="number" step="0.1"
                            onChange={this.handleChange}
-                           defaultValue={this.state.formControls.age.value}
-                           touched={this.state.formControls.age.touched? 1 : 0}
-                           valid={this.state.formControls.age.valid}
+                           defaultValue={this.state.formControls.maxHourlyConsumption.value}
+                           touched={this.state.formControls.maxHourlyConsumption.touched? 1 : 0}
+                           valid={this.state.formControls.maxHourlyConsumption.valid}
                            required
                     />
-                    {this.state.formControls.age.touched && !this.state.formControls.age.valid &&
-                    <div className={"error-message"}> * Age must have a valid format</div>}
                 </FormGroup>
+                {this.state.formControls.maxHourlyConsumption.touched && !this.state.formControls.maxHourlyConsumption.valid &&
+                <div className={"error-message row"}> * MaxHourlyConsumption must have a valid format </div>}
 
-
-                <FormGroup id='password'>
-                    <Label for='passwordField'> Password: </Label>
-                    <Input type="password" name='password' id='passwordField' placeholder={this.state.formControls.password.placeholder}
+                <FormGroup id='username'>
+                    <Label for='usernameField'> username: </Label>
+                    <Input name='username' id='usernameField' placeholder={this.state.formControls.username.placeholder}
                            onChange={this.handleChange}
-                           defaultValue={this.state.formControls.password.value}
-                           touched={this.state.formControls.password.touched? 1 : 0}
-                           valid={this.state.formControls.password.valid}
-                           required
+                           defaultValue={this.state.formControls.username.value}
+                           touched={this.state.formControls.username.touched? 1 : 0}
+                           valid={this.state.formControls.username.valid}
                     />
-                    {this.state.formControls.password.touched && !this.state.formControls.password.valid &&
-                    <div className={"error-message"}> * Password must contain 8-10 characters, at least one uppercase letter, one lowercase letter, one number and one special character</div>}
-                </FormGroup>
-
-                <FormGroup id='role'>
-                    <Label for='roleField'> Role: </Label>
-                    <Input name='role' id='roleField' placeholder={this.state.formControls.role.placeholder}
-                           onChange={this.handleChange}
-                           defaultValue={this.state.formControls.role.value}
-                           touched={this.state.formControls.role.touched? 1 : 0}
-                           valid={this.state.formControls.role.valid}
-                           required
-                    />
-                    {this.state.formControls.role.touched && !this.state.formControls.role.valid &&
-                    <div className={"error-message"}> * Role must have a valid format</div>}
                 </FormGroup>
 
                     <Row>
@@ -249,4 +222,4 @@ class UserForm extends React.Component {
     }
 }
 
-export default UserForm;
+export default DeviceFormUpdate;

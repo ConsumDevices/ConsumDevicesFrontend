@@ -46,9 +46,41 @@ function postUser(user, callback){
     RestApiClient.performRequest(request, callback);
 }
 
+function updateUser(user, callback){
+    let request = new Request(HOST.backend_api + endpoint.user + "/update", {
+        method: 'POST',
+        headers : {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user)
+    });
+
+    console.log("URL: " + request.url);
+
+    RestApiClient.performRequest(request, callback);
+}
+
+function deleteUser(user, callback){
+    let request = new Request(HOST.backend_api + endpoint.user + "/delete" , {
+        method: 'POST',
+        headers : {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user)
+    });
+
+    console.log("URL: " + request.url);
+
+    RestApiClient.performRequest(request, callback);
+}
+
 export {
     getUsers,
     getUserById,
     postUser,
-    getRole
+    getRole,
+    updateUser,
+    deleteUser
 };

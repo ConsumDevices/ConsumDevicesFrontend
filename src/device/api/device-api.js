@@ -50,9 +50,41 @@ function postDevice(device, callback){
     RestApiClient.performRequest(request, callback);
 }
 
+function updateDevice(device, callback){
+    let request = new Request(HOST.backend_api + endpoint.device + "/update", {
+        method: 'POST',
+        headers : {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(device)
+    });
+
+    console.log("URL: " + request.url);
+
+    RestApiClient.performRequest(request, callback);
+}
+
+function deleteDevice(device, callback){
+    let request = new Request(HOST.backend_api + endpoint.device + "/delete", {
+        method: 'POST',
+        headers : {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(device)
+    });
+
+    console.log("URL: " + request.url);
+
+    RestApiClient.performRequest(request, callback);
+}
+
 export {
     getDevices,
     getDeviceById,
     postDevice,
-    getRole
+    getRole,
+    updateDevice,
+    deleteDevice
 };

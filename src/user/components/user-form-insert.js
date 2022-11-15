@@ -1,14 +1,14 @@
 import React from 'react';
-import validate from "./validators/device-validators";
+import validate from "./validators/user-validators";
 import Button from "react-bootstrap/Button";
-import * as API_DEVICES from "../api/device-api";
+import * as API_USERS from "../api/user-api";
 import APIResponseErrorMessage from "../../commons/errorhandling/api-response-error-message";
 import {Col, Row} from "reactstrap";
 import { FormGroup, Input, Label} from 'reactstrap';
 
 
 
-class DeviceForm extends React.Component {
+class UserFormInsert extends React.Component {
 
     constructor(props) {
         super(props);
@@ -25,22 +25,33 @@ class DeviceForm extends React.Component {
             formControls: {
                 name: {
                     value: '',
-                    placeholder: 'What is the name?',
+                    placeholder: 'What is your name?',
                     valid: false,
                     touched: false,
                     validationRules: {
                         minLength: 3,
-                        isRequired: true
+                        isRequired: true,
+                        nameValidator: true,
                     }
                 },
-                description: {
+                email: {
                     value: '',
-                    placeholder: 'Description',
+                    placeholder: 'Email',
                     valid: false,
                     touched: false,
                     validationRules: {
-                        minLength: 3,
-                        isRequired: true
+                        emailValidator: true,
+                        isRequired: true,
+                    }
+                },
+                age: {
+                    value: '',
+                    placeholder: 'Age',
+                    valid: false,
+                    touched: false,
+                    validationRules: {
+                        ageValidator:true,
+                        isRequired:true
                     }
                 },
                 address: {
@@ -49,16 +60,25 @@ class DeviceForm extends React.Component {
                     valid: false,
                     touched: false,
                     validationRules: {
-                        isRequired: true
+                        isRequired: true,
                     }
                 },
-                maxHourlyConsumption: {
+                password: {
                     value: '',
-                    placeholder: 'Consumption',
+                    placeholder: 'Password',
                     valid: false,
                     touched: false,
                     validationRules: {
-                        maxHourlyConsumptionValidator: true,
+                        passwordValidator: true
+                    }
+                },
+                role: {
+                    value: '',
+                    placeholder: 'Role',
+                    valid: false,
+                    touched: false,
+                    validationRules: {
+                        roleValidator: true,
                         isRequired: true
                     }
                 },
@@ -100,10 +120,10 @@ class DeviceForm extends React.Component {
 
     };
 
-    registerDevice(device) {
-        return API_DEVICES.postDevice(device, (result, status, error) => {
+    registerUser(user) {
+        return API_USERS.postUser(user, (result, status, error) => {
             if (result !== null && (status === 200 || status === 201)) {
-                console.log("Successfully inserted device with id: " + result);
+                console.log("Successfully inserted user with id: " + result);
                 this.reloadHandler();
             } else {
                 this.setState(({
@@ -116,15 +136,17 @@ class DeviceForm extends React.Component {
 
     //cand dai submit dai register la persoana
     handleSubmit() {
-        let device = {
+        let user = {
             name: this.state.formControls.name.value,
-            description: this.state.formControls.description.value,
+            email: this.state.formControls.email.value,
+            age: this.state.formControls.age.value,
             address: this.state.formControls.address.value,
-            maxHourlyConsumption: this.state.formControls.maxHourlyConsumption.value,
+            password: this.state.formControls.password.value,
+            role: this.state.formControls.role.value,
         };
 
-        console.log(device);
-        this.registerDevice(device);
+        console.log(user);
+        this.registerUser(user);
     }
 
     //si aici render, cu componente noi
@@ -141,20 +163,20 @@ class DeviceForm extends React.Component {
                            required
                     />
                     {this.state.formControls.name.touched && !this.state.formControls.name.valid &&
-                    <div className={"error-message row"}> * Name must have a valid format </div>}
+                    <div className={"error-message row"}> * Name must have a valid format</div>}
                 </FormGroup>
 
-                <FormGroup id='description'>
-                    <Label for='descriptionField'> Description: </Label>
-                    <Input name='description' id='descriptionField' placeholder={this.state.formControls.description.placeholder}
+                <FormGroup id='email'>
+                    <Label for='emailField'> Email: </Label>
+                    <Input name='email' id='emailField' placeholder={this.state.formControls.email.placeholder}
                            onChange={this.handleChange}
-                           defaultValue={this.state.formControls.description.value}
-                           touched={this.state.formControls.description.touched? 1 : 0}
-                           valid={this.state.formControls.description.valid}
+                           defaultValue={this.state.formControls.email.value}
+                           touched={this.state.formControls.email.touched? 1 : 0}
+                           valid={this.state.formControls.email.valid}
                            required
                     />
-                    {this.state.formControls.description.touched && !this.state.formControls.description.valid &&
-                    <div className={"error-message"}> * Description must have a valid format</div>}
+                    {this.state.formControls.email.touched && !this.state.formControls.email.valid &&
+                    <div className={"error-message"}> * Email must have a valid format</div>}
                 </FormGroup>
 
                 <FormGroup id='address'>
@@ -167,22 +189,49 @@ class DeviceForm extends React.Component {
                            required
                     />
                     {this.state.formControls.address.touched && !this.state.formControls.address.valid &&
-                    <div className={"error-message row"}> * Address must have a valid format </div>}
+                    <div className={"error-message"}> * Address must have a valid format</div>}
                 </FormGroup>
 
-                <FormGroup id='maxHourlyConsumption'>
-                    <Label for='maxHourlyConsumptionField'> maxHourlyConsumption: </Label>
-                    <Input name='maxHourlyConsumption' id='maxHourlyConsumptionField' placeholder={this.state.formControls.maxHourlyConsumption.placeholder}
-                           min={0} max={10000} type="number" step="0.1"
+                <FormGroup id='age'>
+                    <Label for='ageField'> Age: </Label>
+                    <Input name='age' id='ageField' placeholder={this.state.formControls.age.placeholder}
+                           min={0} max={100} type="number"
                            onChange={this.handleChange}
-                           defaultValue={this.state.formControls.maxHourlyConsumption.value}
-                           touched={this.state.formControls.maxHourlyConsumption.touched? 1 : 0}
-                           valid={this.state.formControls.maxHourlyConsumption.valid}
+                           defaultValue={this.state.formControls.age.value}
+                           touched={this.state.formControls.age.touched? 1 : 0}
+                           valid={this.state.formControls.age.valid}
                            required
                     />
+                    {this.state.formControls.age.touched && !this.state.formControls.age.valid &&
+                    <div className={"error-message"}> * Age must have a valid format</div>}
                 </FormGroup>
-                {this.state.formControls.maxHourlyConsumption.touched && !this.state.formControls.maxHourlyConsumption.valid &&
-                <div className={"error-message row"}> * MaxHourlyConsumption must have a valid format </div>}
+
+
+                <FormGroup id='password'>
+                    <Label for='passwordField'> Password: </Label>
+                    <Input type="password" name='password' id='passwordField' placeholder={this.state.formControls.password.placeholder}
+                           onChange={this.handleChange}
+                           defaultValue={this.state.formControls.password.value}
+                           touched={this.state.formControls.password.touched? 1 : 0}
+                           valid={this.state.formControls.password.valid}
+                           required
+                    />
+                    {this.state.formControls.password.touched && !this.state.formControls.password.valid &&
+                    <div className={"error-message"}> * Password must contain 8-10 characters, at least one uppercase letter, one lowercase letter, one number and one special character</div>}
+                </FormGroup>
+
+                <FormGroup id='role'>
+                    <Label for='roleField'> Role: </Label>
+                    <Input name='role' id='roleField' placeholder={this.state.formControls.role.placeholder}
+                           onChange={this.handleChange}
+                           defaultValue={this.state.formControls.role.value}
+                           touched={this.state.formControls.role.touched? 1 : 0}
+                           valid={this.state.formControls.role.valid}
+                           required
+                    />
+                    {this.state.formControls.role.touched && !this.state.formControls.role.valid &&
+                    <div className={"error-message"}> * Role must have a valid format</div>}
+                </FormGroup>
 
                     <Row>
                         <Col sm={{size: '4', offset: 5}}>
@@ -200,4 +249,4 @@ class DeviceForm extends React.Component {
     }
 }
 
-export default DeviceForm;
+export default UserFormInsert;
