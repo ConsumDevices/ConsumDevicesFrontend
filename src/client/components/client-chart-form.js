@@ -11,25 +11,10 @@ import Chart from 'react-apexcharts'
 
 class ClientChartForm extends React.Component {
 
-    data = {
-        options: {
-            chart: {
-                id: 'energy-chart'
-            },
-            xaxis: {
-                categories: []
-            }
-        },
-        series: [{
-            name: 'series-1',
-            data: []
-        }]
-    }
-
     constructor(props) {
         super(props);
         this.toggleForm = this.toggleForm.bind(this);
-        this.reloadHandler = this.props.reloadHandler;
+        //this.reloadHandler = this.props.reloadHandler;
 
         this.state = {
 
@@ -51,6 +36,23 @@ class ClientChartForm extends React.Component {
                         isRequired: true
                     }
                 },
+            },
+
+            data : {
+                options: {
+                    chart: {
+                        id: 'energy-chart'
+                    },
+                    xaxis: {
+                        //orele
+                        categories: []
+                    }
+                },
+                series: [{
+                    name: 'series-1',
+                    //valorile
+                    data: []
+                }]
             }
         };
 
@@ -90,19 +92,88 @@ class ClientChartForm extends React.Component {
 
     };
 
-    //cand dai submit dai register la persoana
     handleSubmit() {
         let device = {
             name: this.state.formControls.name.value
         };
 
-        console.log(device);
-        //this.registerUser(user);
+        //console.log(device);
+        this.getConsumptions(device.name);
     }
 
     onChange(date){
         this.setState({
             startDate: date
+        });
+    }
+
+    changeChart(newDate){
+        this.setState({
+            data: newDate
+        });
+    }
+
+    //componentDidMount() {
+    //    this.getConsumptions();
+    //}
+
+    getConsumptions(deviceName) {
+        return API_CLIENT.getConsumptions(deviceName, (result, status, error) => {
+            if (result !== null && (status === 200 || status === 201)) {
+
+                console.log("Successfully got device data!");
+                console.log(result);
+                //Device management: (Filter + Order):
+
+                //this.reloadHandler();
+                let hours = [];
+                let energyData = [];
+                result.forEach(energy => {
+                    let selectedDate = this.state.startDate.getFullYear() + '-' + (this.state.startDate.getMonth() + 1) + '-' + this.state.startDate.getDate();
+                    let energyDate = energy.date.substr(0, 10)
+                    console.log("Selected date: " + selectedDate);
+                    console.log("Energy date: " + energyDate);
+                    console.log("Value: " + energy.value);
+                    //preluam doar instantele din data selectata de user.
+                    if (energyDate === selectedDate) {
+                        hours.push(energy.date);
+                        energyData.push(energy.value);
+                    }
+                });
+
+
+                const newData = {
+                    options: {
+                        chart: {
+                            id: 'energy-chart'
+                        },
+                        xaxis: {
+                            categories: hours
+                        }
+                    },
+                    series: [{
+                        name: 'series-1',
+                        data: energyData
+                    }]
+                }
+                console.log("Timestamps1: " + newData.series.data);
+                console.log("Energy values1: " + newData.options.xaxis.categories);
+
+                //this.data = newData;
+                this.changeChart(newData);
+                console.log("Timestamps: " + this.state.data.series.data);
+                console.log("Energy values: " + this.state.data.options.xaxis.categories);
+
+
+                //onChange(newData)
+                //this.changeChart(newData);
+
+            } else {
+                this.setState(({
+                    errorStatus: status,
+                    error: error
+                }));
+            }
         });
     }
 
@@ -132,7 +203,7 @@ class ClientChartForm extends React.Component {
                 <DatePicker value={this.state.startDate} onChange={ this.onChange } format={"yyyy-MM-dd"}/>
 
                 <Row>
-                    <Chart options={this.data.options} series={this.data.series} type="bar" width={500} height={320} />
+                    <Chart options={this.state.data.options} series={this.state.data.series} type="bar" width={500} height={320} />
                 </Row>
 
                 {

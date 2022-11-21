@@ -4,7 +4,8 @@ import RestApiClient from "../../commons/api/rest-client";
 
 const endpoint = {
     clientUser: '/user',
-    clientDevice: '/device'
+    clientDevice: '/device',
+    deviceConsumption: '/deviceConsumption',
 };
 
 function getDevicesClient(callback) {
@@ -42,8 +43,21 @@ function getUserName(callback) {
     RestApiClient.performRequest(request, callback);
 }
 
+
+function getConsumptions(deviceName, callback){
+    let request = new Request(HOST.backend_api + endpoint.deviceConsumption + "/deviceName/" + deviceName, {
+        method: 'GET',
+        //body: JSON.stringify(deviceName)
+    });
+
+    console.log("URL: " + request.url);
+
+    RestApiClient.performRequest(request, callback);
+}
+
 export {
     getDevicesClient,
     getRole,
     getUserName,
+    getConsumptions
 };

@@ -145,7 +145,7 @@ class ClientContainer extends React.Component {
         this.setState({
             isLoaded: false
         });
-        this.toggleFormChart();
+        //this.toggleFormChart();
         this.fetchRole();
         this.fetchUserName();
         this.fetchDevicesClient();
@@ -172,7 +172,7 @@ class ClientContainer extends React.Component {
                            className={this.props.className} size="lg">
                         <ModalHeader style={{backgroundColor: '#e5c9c9'}} toggle={this.toggleFormChart}> Chart: </ModalHeader>
                         <ModalBody style={{backgroundColor: '#e5c9c9'}}>
-                            <ClientChartForm reloadHandler={this.reloadChart}/>
+                            <ClientChartForm />
                         </ModalBody>
                     </Modal>
                     <Row>
