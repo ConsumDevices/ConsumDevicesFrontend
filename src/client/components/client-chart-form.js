@@ -49,7 +49,7 @@ class ClientChartForm extends React.Component {
                     }
                 },
                 series: [{
-                    name: 'series-1',
+                    name: 'Consumption Values',
                     //valorile
                     data: []
                 }]
@@ -152,7 +152,7 @@ class ClientChartForm extends React.Component {
                         }
                     },
                     series: [{
-                        name: 'series-1',
+                        name: 'Consumption Values',
                         data: energyData
                     }]
                 }
