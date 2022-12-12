@@ -6,7 +6,7 @@ import APIResponseErrorMessage from "../../commons/errorhandling/api-response-er
 import {Col, Row} from "reactstrap";
 import { FormGroup, Input, Label} from 'reactstrap';
 import DatePicker from 'react-date-picker';
-import Chart from 'react-apexcharts'
+import Chart from 'react-apexcharts';
 
 
 class ClientChartForm extends React.Component {

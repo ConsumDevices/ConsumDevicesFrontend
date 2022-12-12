@@ -16,9 +16,16 @@ import * as API_CLIENT from "./api/client-api"
 import ClientTable from "./components/client-table";
 import { withRouter } from "react-router-dom";
 import UserFormDelete from "../user/components/user-form-delete";
+import {HOST} from '../commons/hosts';
+
+import SockJsClient from 'react-stomp';
+
+//const SOCKET_URL = 'http://localhost:8080/ws-message';
+const SOCKET_URL = HOST.backend_api + '/ws-message';
 
 const styleDiv = {overflow: 'hidden'};
 const styleHeader = {textAlign: 'center', backgroundColor: '#e5c9c9'};
+const styleSocket = {textAlign: 'center'};
 
 class ClientContainer extends React.Component {
 
@@ -34,7 +41,22 @@ class ClientContainer extends React.Component {
             errorStatus: 0,
             error: null,
             nameUser : 'nelogat',
+            messageWebSocket: 'no issue',
         };
+    }
+
+    changeMessage(message){
+        this.setState({
+            messageWebSocket: message
+        });
+    }
+
+    onConnection = () => {
+        console.log("Connected with Websocket!");
+    }
+
+    onReceivedMessage = (msg) => {
+        this.changeMessage("Valoarea " + msg.value + " din data " + msg.date + " pentru device-ul:" + msg.deviceId + " este prea mare");
     }
 
     componentDidMount() {
@@ -155,8 +177,24 @@ class ClientContainer extends React.Component {
         return (
             <div style={styleDiv}>
                 <CardHeader style={styleHeader}>
-                    <strong> Hello, {this.state.nameUser}. This are your devices </strong>
+                    <strong> Hello, {this.state.nameUser}. These are your devices </strong>
                 </CardHeader>
+
+                <div>
+                    <SockJsClient
+                        url={SOCKET_URL}
+                        topics={['/wsnotification/message']}
+                        onConnect={this.onConnection}
+                        onDisconnect={console.log("Disconnected!")}
+                        onMessage={msg => this.onReceivedMessage(msg)}
+                        debug={false}
+                    />
+                    <CardHeader style={styleSocket}>
+                        <strong> {this.state.messageWebSocket} </strong>
+                    </CardHeader>
+                </div>
+
+
                 <Card>
                     <br/>
                     <Row>
