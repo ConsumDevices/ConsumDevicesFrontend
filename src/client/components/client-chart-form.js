@@ -132,6 +132,24 @@ class ClientChartForm extends React.Component {
                 let energyData = [];
                 result.forEach(energy => {
                     let selectedDate = this.state.startDate.getFullYear() + '-' + (this.state.startDate.getMonth() + 1) + '-' + this.state.startDate.getDate();
+                    if((this.state.startDate.getMonth() + 1)<10)
+                    {
+                        if(this.state.startDate.getDate()<10)
+                        {
+                            selectedDate = this.state.startDate.getFullYear() + '-0' + (this.state.startDate.getMonth() + 1) + '-0' + this.state.startDate.getDate();
+                        }
+                        else
+                        {
+                            selectedDate = this.state.startDate.getFullYear() + '-0' + (this.state.startDate.getMonth() + 1) + '-' + this.state.startDate.getDate();
+                        }
+                    }
+                    else
+                    {
+                        if(this.state.startDate.getDate()<10)
+                        {
+                            selectedDate = this.state.startDate.getFullYear() + '-' + (this.state.startDate.getMonth() + 1) + '-0' + this.state.startDate.getDate();
+                        }
+                    }
                     let energyDate = energy.date.substr(0, 10)
                     console.log("Selected date: " + selectedDate);
                     console.log("Energy date: " + energyDate);
@@ -140,6 +158,7 @@ class ClientChartForm extends React.Component {
                     if (energyDate === selectedDate) {
                         hours.push(energy.date);
                         energyData.push(energy.value);
+                        console.log("!!!!!!!!!!!!!Intra aici!!!!!!!!!!!!!!!");
                     }
                 });
 
