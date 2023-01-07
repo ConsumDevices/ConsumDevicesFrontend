@@ -8,22 +8,22 @@ const endpoint = {
     deviceConsumption: '/deviceConsumption',
 };
 
-function getDevicesClient(callback) {
+function getDevicesClient(userid, callback) {
     //console.log(params);
-    let request = new Request(HOST.backend_api + endpoint.clientDevice + "/clientD", {
+    let request = new Request(HOST.backend_api + endpoint.clientDevice + "/clientD/" + userid, {
         method: 'GET',
     });
     console.log(request.url);
     RestApiClient.performRequest(request, callback);
 }
 
-function getRole(callback) {
-    let request = new Request(HOST.backend_api + endpoint.clientUser + "/role", {
-        method: 'GET',
-    });
-    console.log(request.url);
-    RestApiClient.performRequest(request, callback);
-}
+// function getRole(callback) {
+//     let request = new Request(HOST.backend_api + endpoint.clientUser + "/role", {
+//         method: 'GET',
+//     });
+//     console.log(request.url);
+//     RestApiClient.performRequest(request, callback);
+// }
 
 /*
 function getId(callback) {
@@ -35,17 +35,17 @@ function getId(callback) {
 }
 */
 
-function getUserName(callback) {
-    let request = new Request(HOST.backend_api + endpoint.clientUser + "/name", {
-        method: 'GET',
-    });
-    console.log(request.url);
-    RestApiClient.performRequest(request, callback);
-}
+// function getUserName(callback) {
+//     let request = new Request(HOST.backend_api + endpoint.clientUser + "/name", {
+//         method: 'GET',
+//     });
+//     console.log(request.url);
+//     RestApiClient.performRequest(request, callback);
+// }
 
 
-function getConsumptions(deviceName, callback){
-    let request = new Request(HOST.backend_api + endpoint.deviceConsumption + "/deviceName/" + deviceName, {
+function getConsumptions(deviceName, userid, callback){
+    let request = new Request(HOST.backend_api + endpoint.deviceConsumption + "/deviceName/" + deviceName + "/" + userid, {
         method: 'GET',
         //body: JSON.stringify(deviceName)
     });
@@ -57,7 +57,7 @@ function getConsumptions(deviceName, callback){
 
 export {
     getDevicesClient,
-    getRole,
-    getUserName,
+    //getRole,
+    //getUserName,
     getConsumptions
 };

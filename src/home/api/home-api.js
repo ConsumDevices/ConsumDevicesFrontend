@@ -22,15 +22,15 @@ function loginUser(user, callback){
     RestApiClient.performRequest(request, callback);
 }
 
-function getRoleLogout(callback) {
-    let request = new Request(HOST.backend_api + endpoint.home + "/roleLogout", {
-        method: 'GET',
-    });
-    console.log(request.url);
-    RestApiClient.performRequest(request, callback);
-}
+// function getRoleLogout(callback) {
+//     let request = new Request(HOST.backend_api + endpoint.home + "/roleLogout", {
+//         method: 'GET',
+//     });
+//     console.log(request.url);
+//     RestApiClient.performRequest(request, callback);
+// }
 
 export {
     loginUser,
-    getRoleLogout
+    //getRoleLogout
 };

@@ -3,6 +3,6 @@ version: '3'
 services:
 
   react:
-    image: tartamanuelfrontend.azurecr.io/tartamanuelfrontendimage:64
+    image: tartamanuelfrontend.azurecr.io/tartamanuelfrontendimage:73
     ports:
        - "80:80"

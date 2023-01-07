@@ -7,6 +7,7 @@ import {Col, Row} from "reactstrap";
 import { FormGroup, Input, Label} from 'reactstrap';
 import DatePicker from 'react-date-picker';
 import Chart from 'react-apexcharts';
+import CookieUser from "../../cookieUser";
 
 
 class ClientChartForm extends React.Component {
@@ -15,6 +16,7 @@ class ClientChartForm extends React.Component {
         super(props);
         this.toggleForm = this.toggleForm.bind(this);
         //this.reloadHandler = this.props.reloadHandler;
+        this.cookieRef = React.createRef();
 
         this.state = {
 
@@ -98,7 +100,7 @@ class ClientChartForm extends React.Component {
         };
 
         //console.log(device);
-        this.getConsumptions(device.name);
+        this.getConsumptions(device.name,this.cookieRef.current.state.id);
     }
 
     onChange(date){
@@ -117,8 +119,8 @@ class ClientChartForm extends React.Component {
     //    this.getConsumptions();
     //}
 
-    getConsumptions(deviceName) {
-        return API_CLIENT.getConsumptions(deviceName, (result, status, error) => {
+    getConsumptions(deviceName, userid) {
+        return API_CLIENT.getConsumptions(deviceName, userid, (result, status, error) => {
             if (result !== null && (status === 200 || status === 201)) {
 
                 console.log("Successfully got device data!");
@@ -210,6 +212,7 @@ class ClientChartForm extends React.Component {
                     this.state.errorStatus > 0 &&
                     <APIResponseErrorMessage errorStatus={this.state.errorStatus} error={this.state.error}/>
                 }
+                <CookieUser ref={this.cookieRef} />
             </div>
         ) ;
     }

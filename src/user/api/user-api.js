@@ -14,13 +14,13 @@ function getUsers(callback) {
     RestApiClient.performRequest(request, callback);
 }
 
-function getRole(callback) {
-    let request = new Request(HOST.backend_api + endpoint.user + "/role", {
-        method: 'GET',
-    });
-    console.log(request.url);
-    RestApiClient.performRequest(request, callback);
-}
+// function getRole(callback) {
+//     let request = new Request(HOST.backend_api + endpoint.user + "/role", {
+//         method: 'GET',
+//     });
+//     console.log(request.url);
+//     RestApiClient.performRequest(request, callback);
+// }
 
 function getUserById(params, callback){
     let request = new Request(HOST.backend_api + endpoint.user + params.id, {
@@ -80,7 +80,7 @@ export {
     getUsers,
     getUserById,
     postUser,
-    getRole,
+    //getRole,
     updateUser,
     deleteUser
 };

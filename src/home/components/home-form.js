@@ -7,15 +7,26 @@ import {Col, Row} from "reactstrap";
 import { FormGroup, Input, Label} from 'reactstrap';
 import { withRouter } from "react-router-dom";
 
+import CookieUser from "../../cookieUser";
+
+//import { instanceOf } from "prop-types";
+//import { withCookies, Cookies } from "react-cookie";
+
 const buttonStyle1 = {backgroundColor: '#751212'};
 
 class HomeForm extends React.Component {
+
+    // static propTypes = {
+    //     cookies: instanceOf(Cookies).isRequired
+    // };
 
     constructor(props) {
         super(props);
         this.toggleForm = this.toggleForm.bind(this);
         this.reloadHandler = this.props.reloadHandler;
         this.sendUser = this.sendUser.bind(this);
+
+        this.cookieRef = React.createRef();
 
         this.state = {
 
@@ -89,12 +100,23 @@ class HomeForm extends React.Component {
                 console.log("User role: " + result);
                 this.reloadHandler();
 
-                if(result === 'client' || result === 'Client')
+                this.cookieRef.current.handleCookie(result);
+                // const { cookies } = this.props;
+                // cookies.set("id", result.id, { path: "/" });
+                // cookies.set("email", result.email, { path: "/" });
+                // cookies.set("password", result.password, { path: "/" });
+                // cookies.set("name", result.name, { path: "/" });
+                // cookies.set("age", result.age, { path: "/" });
+                // cookies.set("role", result.role, { path: "/" });
+                // cookies.set("address", result.address, { path: "/" });
+                // //this.setState({ user: cookies.get("user") });
+
+                if(result.role === 'client' || result.role === 'Client')
                 {
                     let newPath = '/client'
                     this.props.history.push(newPath);
                 }
-                if(result === 'admin' || result === 'Admin')
+                if(result.role === 'admin' || result.role === 'Admin')
                 {
                     let newPath = '/user'
                     this.props.history.push(newPath);
@@ -161,6 +183,7 @@ class HomeForm extends React.Component {
                     this.state.errorStatus > 0 &&
                     <APIResponseErrorMessage errorStatus={this.state.errorStatus} error={this.state.error}/>
                 }
+                <CookieUser ref={this.cookieRef} />
             </div>
         ) ;
     }

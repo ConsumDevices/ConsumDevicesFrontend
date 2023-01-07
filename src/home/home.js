@@ -5,6 +5,8 @@ import BackgroundImg from '../commons/images/energyImage.jpeg';
 import {Button, Card, Col, Container, Jumbotron, Modal, ModalBody, ModalHeader, Row} from 'reactstrap';
 import HomeForm from "./components/home-form";
 
+import CookieUser from "../cookieUser";
+
 import * as API_HOME from "../home/api/home-api";
 
 const backgroundStyle = {
@@ -18,6 +20,7 @@ const backgroundStyle = {
 const textStyle = {color: 'white', textAlign: 'center', marginTop : '7%'};
 const titleStyle = {color: 'white', textAlign: 'center'};
 const buttonStyle1 = {display: 'inline', margin:'1% 1% 1% 48%', backgroundColor: '#751212'};
+
 
 class Home extends React.Component {
 
@@ -33,6 +36,8 @@ class Home extends React.Component {
             errorStatus: 0,
             error: null
         };
+
+        this.cookieRef = React.createRef();
     }
 
     toggleForm() {
@@ -41,12 +46,39 @@ class Home extends React.Component {
 
     componentDidMount() {
         this.fetchRoleLogout();
+        this.cookieRef.current.clearOnLogout();
+
     }
 
     fetchRoleLogout() {
-        return API_HOME.getRoleLogout((result, status, err) => {
+        // return API_HOME.getRoleLogout((result, status, err) => {
+        //
+        //     if (result !== null && status === 200) {
+        //         //daca nu avem admin, redirectionam la home
+        //         if(result === "neLogat")
+        //         {
+        //
+        //         }
+        //         else if(result === 'admin' || result === 'Admin')
+        //         {
+        //             //let newPath = '/user'
+        //             //this.props.history.push(newPath);
+        //         }
+        //         else if(result === 'client' || result === 'Client')
+        //         {
+        //
+        //         }
+        //     } else {
+        //         this.setState(({
+        //             errorStatus: status,
+        //             error: err
+        //         }));
+        //     }
+        // });
 
-            if (result !== null && status === 200) {
+        return (result) => {
+
+            if (result !== null) {
                 //daca nu avem admin, redirectionam la home
                 if(result === "neLogat")
                 {
@@ -61,13 +93,8 @@ class Home extends React.Component {
                 {
 
                 }
-            } else {
-                this.setState(({
-                    errorStatus: status,
-                    error: err
-                }));
             }
-        });
+        };
     }
 
 
@@ -107,7 +134,7 @@ class Home extends React.Component {
                         <HomeForm reloadHandler={this.reload}/>
                     </ModalBody>
                 </Modal>
-
+                <CookieUser ref={this.cookieRef} />
             </div>
         )
     };

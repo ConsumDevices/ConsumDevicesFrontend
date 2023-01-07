@@ -24,13 +24,13 @@ function getDeviceById(params, callback){
     RestApiClient.performRequest(request, callback);
 }
 
-function getRole(callback) {
-    let request = new Request(HOST.backend_api + endpoint.user + "/role", {
-        method: 'GET',
-    });
-    console.log(request.url);
-    RestApiClient.performRequest(request, callback);
-}
+// function getRole(callback) {
+//     let request = new Request(HOST.backend_api + endpoint.user + "/role", {
+//         method: 'GET',
+//     });
+//     console.log(request.url);
+//     RestApiClient.performRequest(request, callback);
+// }
 
 
 
@@ -84,7 +84,7 @@ export {
     getDevices,
     getDeviceById,
     postDevice,
-    getRole,
+    //getRole,
     updateDevice,
     deleteDevice
 };

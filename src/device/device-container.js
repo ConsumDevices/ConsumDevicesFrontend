@@ -19,6 +19,8 @@ import DeviceTable from "./components/device-table";
 import NavigationBar from "../navigation-bar";
 import { withRouter } from "react-router-dom";
 
+import CookieUser from "../cookieUser";
+
 
 const styleDiv = {overflow: 'hidden'};
 const styleHeader = {textAlign: 'center', backgroundColor: '#e5c9c9'};
@@ -43,6 +45,8 @@ class DeviceContainer extends React.Component {
             errorStatus: 0,
             error: null
         };
+
+        this.cookieRef = React.createRef();
     }
 
     componentDidMount() {
@@ -68,33 +72,54 @@ class DeviceContainer extends React.Component {
     }
 
     fetchRole() {
-        return API_DEVICES.getRole((result, status, err) => {
-
-            console.log(result);
-            if (result !== null && status === 200) {
-                //daca nu avem admin, redirectionam la home
-                if(result === "neLogat")
-                {
-                    let newPath = '/'
-                    this.props.history.push(newPath);
-                }
-                else if(result === 'admin' || result === 'Admin')
-                {
-                    //let newPath = '/user'
-                    //this.props.history.push(newPath);
-                }
-                else if(result === 'client' || result === 'Client')
-                {
-                    let newPath = '/client'
-                    this.props.history.push(newPath);
-                }
-            } else {
-                this.setState(({
-                    errorStatus: status,
-                    error: err
-                }));
+        // return API_DEVICES.getRole((result, status, err) => {
+        //
+        //     console.log(result);
+        //     if (result !== null && status === 200) {
+        //         //daca nu avem admin, redirectionam la home
+        //         if(result === "neLogat")
+        //         {
+        //             let newPath = '/'
+        //             this.props.history.push(newPath);
+        //         }
+        //         else if(result === 'admin' || result === 'Admin')
+        //         {
+        //             //let newPath = '/user'
+        //             //this.props.history.push(newPath);
+        //         }
+        //         else if(result === 'client' || result === 'Client')
+        //         {
+        //             let newPath = '/client'
+        //             this.props.history.push(newPath);
+        //         }
+        //     } else {
+        //         this.setState(({
+        //             errorStatus: status,
+        //             error: err
+        //         }));
+        //     }
+        // });
+        //return (result) => {
+        let result = this.cookieRef.current.props.cookies.get("role");
+        if (result !== null) {
+            //daca nu avem admin, redirectionam la home
+            if(result === "neLogat")
+            {
+                let newPath = '/'
+                this.props.history.push(newPath);
             }
-        });
+            else if(result === 'admin' || result === 'Admin')
+            {
+                //let newPath = '/user'
+                //this.props.history.push(newPath);
+            }
+            else if(result === 'client' || result === 'Client')
+            {
+                let newPath = '/client'
+                this.props.history.push(newPath);
+            }
+        }
+        //};
     }
 
     toggleFormInsert() {
@@ -197,7 +222,7 @@ class DeviceContainer extends React.Component {
                         <DeviceFormDelete reloadHandler={this.reloadDelete}/>
                     </ModalBody>
                 </Modal>
-
+                <CookieUser ref={this.cookieRef} />
             </div>
         )
 

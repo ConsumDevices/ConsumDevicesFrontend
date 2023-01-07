@@ -19,6 +19,7 @@ import UserFormDelete from "../user/components/user-form-delete";
 import {HOST} from '../commons/hosts';
 
 import SockJsClient from 'react-stomp';
+import CookieUser from "../cookieUser";
 
 //const SOCKET_URL = 'http://localhost:8080/ws-message';
 const SOCKET_URL = HOST.backend_api + '/ws-message';
@@ -43,6 +44,8 @@ class ClientContainer extends React.Component {
             nameUser : 'nelogat',
             messageWebSocket: 'no issue',
         };
+
+        this.cookieRef = React.createRef();
     }
 
     changeMessage(message){
@@ -61,58 +64,74 @@ class ClientContainer extends React.Component {
 
     componentDidMount() {
         //this.fetchId();
-        this.fetchDevicesClient();
+        this.fetchDevicesClient(this.cookieRef.current.props.cookies.get("id"));
         this.fetchRole();
         this.fetchUserName();
     }
 
-    fetchDevicesClient() {
+    fetchDevicesClient(userid) {
         //this.fetchId();
         //console.log("Params aici: " + this.params);
-        return API_CLIENT.getDevicesClient((result, status, err) => {
+        if(userid !== "")
+        {
+            return API_CLIENT.getDevicesClient(userid,(result, status, err) => {
 
-            if (result !== null && status === 200) {
-                this.setState({
-                    tableData: result,
-                    isLoaded: true
-                });
-            } else {
-                this.setState(({
-                    errorStatus: status,
-                    error: err
-                }));
-            }
-        });
+                if (result !== null && status === 200) {
+                    this.setState({
+                        tableData: result,
+                        isLoaded: true
+                    });
+                } else {
+                    this.setState(({
+                        errorStatus: status,
+                        error: err
+                    }));
+                }
+            });
+        }
     }
 
 
 
     fetchRole() {
-        return API_CLIENT.getRole((result, status, err) => {
-
-            if (result !== null && status === 200) {
-                if(result === "neLogat")
-                {
-                    let newPath = '/'
-                    this.props.history.push(newPath);
-                }
-                else if(result === 'admin' || result === 'Admin')
-                {
-                    let newPath = '/user'
-                    this.props.history.push(newPath);
-                }
-                else if(result === 'client' || result === 'Client')
-                {
-                    //let newPath = '/device'
-                    //this.props.history.push(newPath);
-                }
-            } else {
-                this.setState(({
-                    errorStatus: status,
-                    error: err
-                }));
+        // return API_CLIENT.getRole((result, status, err) => {
+        //
+        //     if (result !== null && status === 200) {
+        //         if(result === "neLogat")
+        //         {
+        //             let newPath = '/'
+        //             this.props.history.push(newPath);
+        //         }
+        //         else if(result === 'admin' || result === 'Admin')
+        //         {
+        //             let newPath = '/user'
+        //             this.props.history.push(newPath);
+        //         }
+        //         else if(result === 'client' || result === 'Client')
+        //         {
+        //             //let newPath = '/device'
+        //             //this.props.history.push(newPath);
+        //         }
+        //     } else {
+        //         this.setState(({
+        //             errorStatus: status,
+        //             error: err
+        //         }));
+        //     }
+        // });
+        let result = this.cookieRef.current.props.cookies.get("role");
+        if (result !== null) {
+            if (result === "neLogat") {
+                let newPath = '/'
+                this.props.history.push(newPath);
+            } else if (result === 'admin' || result === 'Admin') {
+                let newPath = '/user'
+                this.props.history.push(newPath);
+            } else if (result === 'client' || result === 'Client') {
+                //let newPath = '/device'
+                //this.props.history.push(newPath);
             }
-        });
+        }
     }
 
     /*
@@ -132,19 +151,37 @@ class ClientContainer extends React.Component {
     }
     */
     fetchUserName() {
-        return API_CLIENT.getUserName((result, status, err) => {
-
-            if (result !== null && status === 200) {
-                this.setState({
-                    nameUser: result
-                });
-            } else {
-                this.setState(({
-                    errorStatus: status,
-                    error: err
-                }));
-            }
-        });
+        // return API_CLIENT.getUserName((result, status, err) => {
+        //
+        //     if (result !== null && status === 200) {
+        //         this.setState({
+        //             nameUser: result
+        //         });
+        //     }
+        //     else {
+        //         this.setState(({
+        //             errorStatus: status,
+        //             error: err
+        //         }));
+        //     }
+        // });
+        //console.log("Intra aici");
+        //console.log(this.cookieRef.current.state.name);
+        //return (result=this.cookieRef.current.state.name) => {
+        //    //console.log(result);
+            //console.log(this.cookieRef.current.state.name);
+        //    if (result !== null) {
+        //        this.setState({
+        //            nameUser: result
+        //        });
+        //    }
+        //};
+        let result = this.cookieRef.current.props.cookies.get("name")
+        if (result !== null) {
+            this.setState({
+                nameUser: result
+            });
+        }
     }
 
     toggleFormChart() {
@@ -170,7 +207,7 @@ class ClientContainer extends React.Component {
         //this.toggleFormChart();
         this.fetchRole();
         this.fetchUserName();
-        this.fetchDevicesClient();
+        this.fetchDevicesClient(this.cookieRef.current.cookies.get("id"));
     }
 
     render() {
@@ -223,7 +260,7 @@ class ClientContainer extends React.Component {
                         </Col>
                     </Row>
                 </Card>
-
+                <CookieUser ref={this.cookieRef} />
             </div>
         )
 
