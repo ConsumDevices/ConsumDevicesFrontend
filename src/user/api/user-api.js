@@ -6,6 +6,54 @@ const endpoint = {
     user: '/user'
 };
 
+function messageFromAdmin(adminMessage, callback){
+    console.log("Inainte " + adminMessage.message);
+    let request = new Request(HOST.backend_api + endpoint.user + "/messageAdmin" , {
+        method: 'POST',
+        headers : {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(adminMessage)
+    });
+    console.log("Dupa " + adminMessage.message);
+    console.log("URL: " + request.url);
+
+    RestApiClient.performRequest(request, callback);
+}
+
+function adminTyping(messageTyping, callback){
+    //console.log("Inainte " + messageTyping.messageTyping);
+    let request = new Request(HOST.backend_api + endpoint.user + "/messageTypingAdmin" , {
+        method: 'POST',
+        headers : {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageTyping)
+    });
+    //console.log("Dupa " + adminMessage.message);
+    //console.log("URL: " + request.url);
+
+    RestApiClient.performRequest(request, callback);
+}
+
+function adminRead(messageRead, callback){
+    //console.log("Inainte " + messageTyping.messageTyping);
+    let request = new Request(HOST.backend_api + endpoint.user + "/messageReadAdmin" , {
+        method: 'POST',
+        headers : {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageRead)
+    });
+    //console.log("Dupa " + adminMessage.message);
+    //console.log("URL: " + request.url);
+
+    RestApiClient.performRequest(request, callback);
+}
+
 function getUsers(callback) {
     let request = new Request(HOST.backend_api + endpoint.user, {
         method: 'GET',
@@ -82,5 +130,8 @@ export {
     postUser,
     //getRole,
     updateUser,
-    deleteUser
+    deleteUser,
+    messageFromAdmin,
+    adminTyping,
+    adminRead,
 };

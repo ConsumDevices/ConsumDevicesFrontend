@@ -4,7 +4,7 @@ import {
     Button,
     Card,
     CardHeader,
-    Col,
+    Col, Input,
     Modal,
     ModalBody,
     ModalHeader,
@@ -20,9 +20,16 @@ import {HOST} from '../commons/hosts';
 
 import SockJsClient from 'react-stomp';
 import CookieUser from "../cookieUser";
+import * as API_HOME from "../home/api/home-api";
+import validate from "../user/components/validators/user-validators";
+import * as API_USERS from "../user/api/user-api";
 
 //const SOCKET_URL = 'http://localhost:8080/ws-message';
 const SOCKET_URL = HOST.backend_api + '/ws-message';
+
+const SOCKET_URL_CHAT = HOST.backend_api + '/chatClient';
+const SOCKET_URL_TYPING = HOST.backend_api + '/typingAdmin';
+const SOCKET_URL_READ = HOST.backend_api + '/readAdmin';
 
 const styleDiv = {overflow: 'hidden'};
 const styleHeader = {textAlign: 'center', backgroundColor: '#e5c9c9'};
@@ -34,6 +41,11 @@ class ClientContainer extends React.Component {
         super(props);
         this.toggleFormChart = this.toggleFormChart.bind(this);
         this.reloadChart = this.reloadChart.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.sendMessageRead = this.sendMessageRead.bind(this);
+
+
         this.state = {
             selected: false,
             collapseForm: false,
@@ -43,10 +55,22 @@ class ClientContainer extends React.Component {
             error: null,
             nameUser : 'nelogat',
             messageWebSocket: 'no issue',
+            clientMessage: '',
+            messageReceived: '',
+            messageTextArea: '',
+            chatDisplayed: [],
+            messageTyping: '',
+            messageRead: '',
+
         };
 
         this.cookieRef = React.createRef();
+        this.divRef = React.createRef();
     }
+
+    scrollToBottom = () => {
+        this.divRef.current.scroll({ top: this.divRef.current.scrollHeight + this.state.messageReceived.length, behavior: 'smooth' });
+    };
 
     changeMessage(message){
         this.setState({
@@ -62,11 +86,224 @@ class ClientContainer extends React.Component {
         this.changeMessage("Valoarea " + msg.value + " din data " + msg.date + " pentru device-ul:" + msg.deviceId + " este prea mare");
     }
 
+    printMessage(message)
+    {
+        this.setState(({
+            chatDisplayed: this.state.chatDisplayed.concat(<Input style={{backgroundColor: '#169db0', width:'50%',resize:'none'}}
+                                                                  type="textarea"
+                                                                  value={"ADMIN:\n" + message}
+                                                                  disabled
+                                                                  cols='30'
+                                                                  rows={message.length/53+2}
+            />)
+        }));
+
+    }
+
+    onReceivedMessageFromAdminRead = (msg) => {
+
+        //console.log("Intra aici");
+        if(msg.clientID === this.cookieRef.current.props.cookies.get("id"))
+        {
+            if(msg.messageRead === 'read')
+            {
+                //console.log("Intra aici Typing")
+                this.setState({
+                    messageRead: "Message was read",
+                });
+            }
+        }
+
+    }
+
+    onReceivedMessageFromAdminTyping = (msg) => {
+
+        if(msg.clientID === this.cookieRef.current.props.cookies.get("id"))
+        {
+            if(msg.messageTyping === 'typing')
+            {
+                console.log("Intra aici Typing")
+                this.setState({
+                    messageTyping: "Admin is typing ...",
+                });
+            }
+            else
+            {
+                console.log("Intra aici")
+                this.setState({
+                    messageTyping: '',
+                });
+            }
+        }
+
+    }
+
+    onReceivedMessageFromAdmin = (msg) => {
+
+        if(msg.clientID === this.cookieRef.current.props.cookies.get("id"))
+        {
+            this.setState({
+                messageReceived: msg.message,
+            });
+
+            this.printMessage(this.state.messageReceived);
+            this.setState({
+                messageTyping: '',
+                messageRead: '',
+            });
+
+            this.scrollToBottom();
+        }
+    }
+
+    sendMessage(messageDTO)
+    {
+        this.setState(({
+            //messageTextArea: this.state.messageTextArea + " " + messageDTO.message,
+            clientMessage: '',
+            chatDisplayed: this.state.chatDisplayed.concat(<Input style={{backgroundColor: '#5a7277', width:'50%', marginLeft:'50%',resize:'none', color:'#ffffff'}}
+                                                                  type="textarea"
+                                                                  value={this.cookieRef.current.props.cookies.get("name") + ":\n" + messageDTO.message}
+                                                                  disabled
+                                                                  cols='30'
+                                                                  rows={messageDTO.message.length/53+2}
+            />),
+            messageRead: '',
+        }));
+        console.log(messageDTO);
+
+        return API_CLIENT.messageFromClient(messageDTO, (result, status, error) => {
+            if (result !== null && (status === 200 || status === 201)) {
+                console.log("Successfully sent message! " + result);
+            } else {
+                this.setState(({
+                    errorStatus: status,
+                    error: error
+                }));
+            }
+
+        });
+    }
+
+    handleChange = event => {
+
+        //const name = event.target.name;
+        const value = event.target.value;
+
+        this.setState({
+            clientMessage: value,
+        });
+
+        if(this.state.clientID !== '')
+        {
+            if(value !== '')
+            {
+                let messageTypingDTO = {
+                    messageTyping:'typing',
+                    clientID: this.cookieRef.current.props.cookies.get("id"),
+                };
+
+                return API_CLIENT.clientTyping(messageTypingDTO, (result, status, error) => {
+                    if (result !== null && (status === 200 || status === 201)) {
+                        console.log("Successfully sent message! " + result);
+                    } else {
+                        this.setState(({
+                            errorStatus: status,
+                            error: error
+                        }));
+                    }
+
+                });
+            }
+            else
+            {
+                console.log("Intra aici notyping");
+                let messageTypingDTO = {
+                    messageTyping:'notyping',
+                    clientID: this.cookieRef.current.props.cookies.get("id"),
+                };
+
+                return API_CLIENT.clientTyping(messageTypingDTO, (result, status, error) => {
+                    if (result !== null && (status === 200 || status === 201)) {
+                        console.log("Successfully sent message! " + result);
+                    } else {
+                        this.setState(({
+                            errorStatus: status,
+                            error: error
+                        }));
+                    }
+
+                });
+            }
+        }
+
+    };
+
+
+    handleSubmit()
+    {
+        if(this.state.clientMessage === '')
+        {
+            console.log("Empty message");
+        }
+        else
+        {
+            let messageDTO = {
+                message:this.state.clientMessage,
+                clientID: this.cookieRef.current.props.cookies.get("id"),
+                adminID: 'e50762ef-1719-471e-8315-b0576da2af6f',
+                name: this.cookieRef.current.props.cookies.get("name"),
+            };
+
+            console.log("Mesaj " + messageDTO.message);
+            console.log("ID " + messageDTO.clientID);
+            this.sendMessage(messageDTO);
+
+            this.scrollToBottom();
+        }
+    }
+
+    sendMessageRead(){
+
+        if(this.state.chatDisplayed.length>0)
+        {
+            let lastInput = this.state.chatDisplayed[this.state.chatDisplayed.length-1];
+            let stringLast = lastInput.props.value;
+            console.log(stringLast);
+            //console.log("Intra aici nou");
+
+            if(stringLast.includes('ADMIN'))
+            {
+                let messageReadDTO = {
+                    messageRead:'read',
+                    clientID: this.cookieRef.current.props.cookies.get("id"),
+                };
+
+                return API_CLIENT.clientRead(messageReadDTO, (result, status, error) => {
+                    if (result !== null && (status === 200 || status === 201)) {
+                        console.log("Successfully sent message! " + result);
+                    } else {
+                        this.setState(({
+                            errorStatus: status,
+                            error: error
+                        }));
+                    }
+
+                });
+            }
+        }
+
+    }
+
     componentDidMount() {
         //this.fetchId();
         this.fetchDevicesClient(this.cookieRef.current.props.cookies.get("id"));
         this.fetchRole();
         this.fetchUserName();
+    }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
     }
 
     fetchDevicesClient(userid) {
@@ -217,6 +454,33 @@ class ClientContainer extends React.Component {
                     <strong> Hello, {this.state.nameUser}. These are your devices </strong>
                 </CardHeader>
 
+                <SockJsClient
+                    url={SOCKET_URL_CHAT}
+                    topics={['/messageToClient/message']}
+                    onConnect={this.onConnection}
+                    onDisconnect={console.log("Disconnected chat!")}
+                    onMessage={msgDeLaAdmin => this.onReceivedMessageFromAdmin(msgDeLaAdmin)}
+                    debug={false}
+                />
+
+                <SockJsClient
+                    url={SOCKET_URL_TYPING}
+                    topics={['/typingFromAdmin/message']}
+                    onConnect={this.onConnection}
+                    onDisconnect={console.log("Disconnected chat!")}
+                    onMessage={msgDeLaAdminTyping => this.onReceivedMessageFromAdminTyping(msgDeLaAdminTyping)}
+                    debug={false}
+                />
+
+                <SockJsClient
+                    url={SOCKET_URL_READ}
+                    topics={['/readFromAdmin/message']}
+                    onConnect={this.onConnection}
+                    onDisconnect={console.log("Disconnected chat!")}
+                    onMessage={msgDeLaAdminRead => this.onReceivedMessageFromAdminRead(msgDeLaAdminRead)}
+                    debug={false}
+                />
+
                 <div>
                     <SockJsClient
                         url={SOCKET_URL}
@@ -232,7 +496,7 @@ class ClientContainer extends React.Component {
                 </div>
 
 
-                <Card>
+                <Card style={{paddingBottom:'2%'}}>
                     <br/>
                     <Row>
                         <Col sm={{size: '10', offset: 11}}>
@@ -260,6 +524,38 @@ class ClientContainer extends React.Component {
                         </Col>
                     </Row>
                 </Card>
+
+                <Card style={{paddingTop:'2%', paddingBottom:'2%'}}>
+                    <Row>
+                        {/*<Col sm={{size: '8', offset: 2}}>*/}
+                        {/*    <Input type="textarea" id='messages received' rows = '10'  readOnly={true}*/}
+                        {/*           value={this.state.messageTextArea}*/}
+                        {/*    />*/}
+                        {/*</Col>*/}
+                        <Col sm={{size: '8', offset: 2}}>
+                            <div ref={this.divRef} style={{overflowY:"scroll", minHeight:"30vh", maxHeight:"30vh"}}>
+                                {this.state.chatDisplayed}
+                            </div>
+                        </Col>
+                    </Row>
+                    <p style={{textAlign:'center'}}>{this.state.messageTyping}</p>
+                    <p style={{textAlign:'center'}}>{this.state.messageRead}</p>
+                    <Row style={{paddingTop:'1%'}}>
+                        <Col sm={{size: '7', offset: 2}}>
+                            <Input name='clientMessage' id='clientMessageField'
+                                   placeholder="Type your message"
+                                   onChange={this.handleChange}
+                                   onClick={this.sendMessageRead}
+                                   value={this.state.clientMessage}
+                            />
+                        </Col>
+                        <Col sm={{size: '3', offset: 0}}>
+                            <Button style={{width:'27%'}} type={"submit"} onClick={this.handleSubmit}> Send </Button>
+                        </Col>
+                    </Row>
+                </Card>
+
+
                 <CookieUser ref={this.cookieRef} />
             </div>
         )

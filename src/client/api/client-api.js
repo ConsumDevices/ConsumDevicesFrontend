@@ -17,6 +17,55 @@ function getDevicesClient(userid, callback) {
     RestApiClient.performRequest(request, callback);
 }
 
+function messageFromClient(clientMessage, callback){
+    console.log("Inainte " + clientMessage.message);
+    let request = new Request(HOST.backend_api + endpoint.clientUser + "/messageClient" , {
+        method: 'POST',
+        headers : {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(clientMessage)
+    });
+    console.log("Dupa " + clientMessage.message);
+    console.log("URL: " + request.url);
+
+    RestApiClient.performRequest(request, callback);
+}
+
+
+function clientTyping(messageTyping, callback){
+    //console.log("Inainte " + messageTyping.messageTyping);
+    let request = new Request(HOST.backend_api + endpoint.clientUser + "/messageTypingClient" , {
+        method: 'POST',
+        headers : {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageTyping)
+    });
+    //console.log("Dupa " + adminMessage.message);
+    //console.log("URL: " + request.url);
+
+    RestApiClient.performRequest(request, callback);
+}
+
+function clientRead(messageRead, callback){
+    //console.log("Inainte " + messageTyping.messageTyping);
+    let request = new Request(HOST.backend_api + endpoint.clientUser + "/messageReadClient" , {
+        method: 'POST',
+        headers : {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageRead)
+    });
+    //console.log("Dupa " + adminMessage.message);
+    //console.log("URL: " + request.url);
+
+    RestApiClient.performRequest(request, callback);
+}
+
 // function getRole(callback) {
 //     let request = new Request(HOST.backend_api + endpoint.clientUser + "/role", {
 //         method: 'GET',
@@ -59,5 +108,8 @@ export {
     getDevicesClient,
     //getRole,
     //getUserName,
-    getConsumptions
+    getConsumptions,
+    messageFromClient,
+    clientTyping,
+    clientRead,
 };
